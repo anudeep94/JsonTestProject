@@ -124,6 +124,17 @@ NSArray *_groups;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+//    _manager = [[MeetupManager alloc] init];
+//    _manager.communicator = [[MeetupCommunicator alloc] init];
+//    _manager.communicator.delegate = _manager;
+//    _manager.delegate = self;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(startFetchingGroups:)
+                                                 name:@"kCLAuthorizationStatusAuthorized"
+                                               object:nil];
+    
 }
 
 - (void)didReceiveMemoryWarning {
