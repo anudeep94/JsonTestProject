@@ -10,17 +10,24 @@
 #import <CoreLocation/CoreLocation.h>
 
 
+@class Communicator;
+
 @interface ViewController : UIViewController
 
 +(NSArray *)groupFromJSON:(NSData *)objectNotation error:(NSError **) error;
 -(void)receivedGroupsJSON:(NSData *)objectNotation;
 -(void) fetchingGroupsFailedWithError:(NSError *)error;
+- (void)startFetchingGroups:(NSNotification *)notification;
+-(void)fetchGroupsAtCoordinate:(CLLocationCoordinate2D)coordinate;
+
+@property (weak, nonatomic) Communicator *communicator;
+
 
 @property (weak, nonatomic) id delegate;
 @property(nonatomic, strong) IBOutlet UITableView *tableView;
 
 
--(void)searchGroupsAtCoordinate :(CLLocationCoordinate2D)coordinate;
+-(void) searchGroupsAtCoordinate:(CLLocationCoordinate2D)coordinate;
 
 @end
 

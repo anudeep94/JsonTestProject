@@ -18,8 +18,12 @@
 #define longi 76.354878
 
 
-@interface ViewController()
 
+
+
+
+@interface ViewController()
+@property (weak, nonatomic) CLLocationManager *locationManager;
 
 @end
 
@@ -63,6 +67,12 @@ NSArray *_groups;
     return groups;
 }
 
+-(void)fetchGroupsAtCoordinate:(CLLocationCoordinate2D)coordinate
+{
+    [self/*.communicator*/ searchGroupsAtCoordinate :coordinate];
+}
+
+
 
 -(void)receivedGroupsJSON:(NSData *)objectNotation
 {
@@ -83,6 +93,10 @@ NSArray *_groups;
     [self.delegate fetchingGroupsFailedWithError:error];
 }
 
+- (void)startFetchingGroups:(NSNotification *)notification
+{
+    [self.delegate fetchGroupsAtCoordinate:self.locationManager.location.coordinate];
+}
 
 -(void) searchGroupsAtCoordinate:(CLLocationCoordinate2D)coordinate
 
