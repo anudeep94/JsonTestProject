@@ -10,6 +10,8 @@
 #import <UIKit/UIKit.h>
 #import "Group.h"
 #import "DetailCell.h"
+#import <UIKit/UITableView.h>
+
 
 #define API_KEY @"5d11401a1335801321166722396f42"
 #define PAGE_COUNT 20
@@ -18,31 +20,52 @@
 #define longi 76.354878
 
 
+@interface ViewController() <UITableViewDataSource, UITableViewDelegate>
+{
+    __weak IBOutlet UILabel *Namelabel;
+    NSArray *groups;
+}
 
-
-
-
-@interface ViewController()
 @property (weak, nonatomic) CLLocationManager *locationManager;
+@property (weak, nonatomic) IBOutlet UILabel *descript;
+@property (weak, nonatomic) IBOutlet UILabel *who;
+@property (weak, nonatomic) IBOutlet UILabel *location;
 
 @end
 
 @implementation ViewController
 
-NSArray *_groups;
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(startFetchingGroups:)
+                                                 name:@"kCLAuthorizationStatusAuthorized"
+                                               object:nil];
+    //notifies the Authorization like an popup message
+    self.tableView.delegate= self;
+    self.tableView.dataSource=self;
+    
+    
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
 
 
 +(NSArray *)groupFromJSON:(NSData *)objectNotation error:(NSError **) error
 {
     NSError *localError = nil;
-    NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:objectNotation options:0 error:&localError];
+    NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:objectNotation options:0 error:&localError];//Converts the JSON content, make it readable for the compiler.
     
     if (localError != nil) {
         *error = localError;
         return nil;
     }
     
-    NSMutableArray *groups = [[NSMutableArray alloc] init];
+    NSMutableArray *groups = [[NSMutableArray alloc] init];//Modifiable Array
     
     NSArray *results = [parsedObject valueForKey:@"results"];
     NSLog(@"Count %lu", (unsigned long)results.count);
@@ -60,7 +83,7 @@ NSArray *_groups;
                 [group setValue:[groupDic valueForKey:key] forKey:newKey];
             }
         }
-        
+        // Maps to a dictionary according to the keys, the corresponding value will be referenced.
         [groups addObject:group];
     }
     
@@ -69,7 +92,7 @@ NSArray *_groups;
 
 -(void)fetchGroupsAtCoordinate:(CLLocationCoordinate2D)coordinate
 {
-    [self/*.communicator*/ searchGroupsAtCoordinate :coordinate];
+    [self searchGroupsAtCoordinate :coordinate];
 }
 
 
@@ -77,26 +100,26 @@ NSArray *_groups;
 -(void)receivedGroupsJSON:(NSData *)objectNotation
 {
     NSError *error=nil;
-    NSArray *groups=[ViewController groupFromJSON:objectNotation error:&error];
+    NSArray *receivedGroups=[ViewController groupFromJSON:objectNotation error:&error];
     
     if(error !=nil)
     {
-        [self.delegate fetchingGroupsFailedWithError:error];
+        [self fetchingGroupsFailedWithError:error];
     }else{
         
-        [self.delegate didReceiveGroups:groups];
+        [self didReceiveGroups:receivedGroups];
     }
 }
 
 -(void) fetchingGroupsFailedWithError:(NSError *)error
 {
-    [self.delegate fetchingGroupsFailedWithError:error];
-}
+    [self fetchingGroupsFailedWithError:error];
+}//fetches groups with erros.
 
 - (void)startFetchingGroups:(NSNotification *)notification
 {
-    [self.delegate fetchGroupsAtCoordinate:self.locationManager.location.coordinate];
-}
+    [self fetchGroupsAtCoordinate:self.locationManager.location.coordinate];
+}//fetches groups
 
 -(void) searchGroupsAtCoordinate:(CLLocationCoordinate2D)coordinate
 
@@ -109,58 +132,35 @@ NSArray *_groups;
     [NSURLConnection sendAsynchronousRequest:[[NSURLRequest alloc] initWithURL:url] queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
         
         if (error) {
-            [self.delegate fetchingGroupsFailedWithError:error];
+            [self fetchingGroupsFailedWithError:error];
         } else {
-            [self.delegate receivedGroupsJSON:data];
+            [self receivedGroupsJSON:data];
         }
     }];
-}
-
-
-
-
-
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-    
-//    _manager = [[MeetupManager alloc] init];
-//    _manager.communicator = [[MeetupCommunicator alloc] init];
-//    _manager.communicator.delegate = _manager;
-//    _manager.delegate = self;
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(startFetchingGroups:)
-                                                 name:@"kCLAuthorizationStatusAuthorized"
-                                               object:nil];
-    
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+}//establishes a connection with the API
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _groups.count;
+    return groups.count;//returns the count of no.of elements passed.
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    DetailCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    DetailCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"  forIndexPath:indexPath];//Resizes the cell according to the registered identifier
     
-    Group *group = _groups[indexPath.row];
-    [cell.nameLabel setText:group.name];
+    Group *group = groups[indexPath.row];
+    [cell.nameLabel setText:group.name];//appends the retrived values to the label
     
     return cell;
 }
-- (void)didReceiveGroups:(NSArray *)groups
+- (void)didReceiveGroups:(NSArray *)receivedGroups
 {
-    _groups = groups;
-    [self.tableView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        groups = receivedGroups;
+        [self.tableView reloadData];
+    });
+    //Reloads New data into the the table view.
 }
 
 

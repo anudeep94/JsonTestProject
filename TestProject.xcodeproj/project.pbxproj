@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		843B9D561D26344400BAB492 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843B9D551D26344400BAB492 /* AdSupport.framework */; };
+		843B9D581D263AA700BAB492 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843B9D571D263AA700BAB492 /* CoreLocation.framework */; };
+		846133221D2A30B100683E8C /* Group.m in Sources */ = {isa = PBXBuildFile; fileRef = 846133211D2A30B100683E8C /* Group.m */; };
+		846133241D2A425F00683E8C /* DetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 846133231D2A425F00683E8C /* DetailCell.m */; };
 		84FB42791D224CD4004B7BF5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FB42781D224CD4004B7BF5 /* main.m */; };
 		84FB427C1D224CD4004B7BF5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FB427B1D224CD4004B7BF5 /* AppDelegate.m */; };
 		84FB427F1D224CD4004B7BF5 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FB427E1D224CD4004B7BF5 /* ViewController.m */; };
@@ -17,6 +21,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		843B9D551D26344400BAB492 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		843B9D571D263AA700BAB492 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		846133211D2A30B100683E8C /* Group.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Group.m; sourceTree = "<group>"; };
+		846133231D2A425F00683E8C /* DetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailCell.m; sourceTree = "<group>"; };
 		84F78D9D1D227A7B008CCADD /* Group.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Group.h; sourceTree = "<group>"; };
 		84F78D9E1D228C50008CCADD /* DetailCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailCell.h; sourceTree = "<group>"; };
 		84FB42741D224CD4004B7BF5 /* TestProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -37,6 +45,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				843B9D581D263AA700BAB492 /* CoreLocation.framework in Frameworks */,
+				843B9D561D26344400BAB492 /* AdSupport.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,6 +56,8 @@
 		84FB426B1D224CD4004B7BF5 = {
 			isa = PBXGroup;
 			children = (
+				843B9D571D263AA700BAB492 /* CoreLocation.framework */,
+				843B9D551D26344400BAB492 /* AdSupport.framework */,
 				84FB42761D224CD4004B7BF5 /* TestProject */,
 				84FB42751D224CD4004B7BF5 /* Products */,
 			);
@@ -67,7 +79,9 @@
 				84FB427D1D224CD4004B7BF5 /* ViewController.h */,
 				84FB427E1D224CD4004B7BF5 /* ViewController.m */,
 				84F78D9E1D228C50008CCADD /* DetailCell.h */,
+				846133231D2A425F00683E8C /* DetailCell.m */,
 				84F78D9D1D227A7B008CCADD /* Group.h */,
+				846133211D2A30B100683E8C /* Group.m */,
 				84FB42801D224CD4004B7BF5 /* Main.storyboard */,
 				84FB42861D224CD4004B7BF5 /* Assets.xcassets */,
 				84FB42881D224CD4004B7BF5 /* LaunchScreen.storyboard */,
@@ -158,6 +172,8 @@
 			files = (
 				84FB427F1D224CD4004B7BF5 /* ViewController.m in Sources */,
 				84FB427C1D224CD4004B7BF5 /* AppDelegate.m in Sources */,
+				846133241D2A425F00683E8C /* DetailCell.m in Sources */,
+				846133221D2A30B100683E8C /* Group.m in Sources */,
 				84FB42791D224CD4004B7BF5 /* main.m in Sources */,
 				84FB42851D224CD4004B7BF5 /* TestProject.xcdatamodeld in Sources */,
 			);
@@ -270,24 +286,34 @@
 		84FB428F1D224CD4004B7BF5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					armv7s,
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = TestProject/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.pytenlabs.TestProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "arm64 armv7 armv7s i386";
 			};
 			name = Debug;
 		};
 		84FB42901D224CD4004B7BF5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					armv7s,
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = TestProject/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.pytenlabs.TestProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "arm64 armv7 armv7s i386";
 			};
 			name = Release;
 		};

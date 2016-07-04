@@ -10,7 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 
 
-@class Communicator;
+//@class Communicator;
 
 @interface ViewController : UIViewController
 
@@ -20,11 +20,10 @@
 - (void)startFetchingGroups:(NSNotification *)notification;
 -(void)fetchGroupsAtCoordinate:(CLLocationCoordinate2D)coordinate;
 
-@property (weak, nonatomic) Communicator *communicator;
+//@property (weak, nonatomic) Communicator *communicator;
 
 
-@property (weak, nonatomic) id delegate;
-@property(nonatomic, strong) IBOutlet UITableView *tableView;
+@property(nonatomic, weak) IBOutlet UITableView *tableView;
 
 
 -(void) searchGroupsAtCoordinate:(CLLocationCoordinate2D)coordinate;
